@@ -1,26 +1,24 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Suspense } from "react";
+import { Route, Switch, BrowserRouter } from "react-router-dom";
+import { CircularProgress } from "@material-ui/core";
+import ThemeProvider from "./components/ThemeProvider";
 
-function App() {
+const lazyHome = React.lazy(() => import("./pages/home"));
+const lazyAbout = React.lazy(() => import("./pages/about"));
+
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider>
+      <BrowserRouter>
+        <Switch>
+          <Suspense fallback={<CircularProgress color="secondary" />}>
+            <Route exact path="/" component={lazyHome} />
+            <Route path="/about" component={lazyAbout} />
+          </Suspense>
+        </Switch>
+      </BrowserRouter>
+    </ThemeProvider>
   );
-}
+};
 
 export default App;
